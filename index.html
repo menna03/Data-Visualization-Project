@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Score Prediction</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        h2 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="file"],
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #trainMessage,
+        #predictionResult {
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Credit Score Prediction</h1>
+
+        <h2>Train Model</h2>
+        <form id="trainForm" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <button type="submit">Train Model</button>
+        </form>
+        <div id="trainMessage"></div>
+
+        <h2>Predict</h2>
+        <form id="predictForm">
+            <label for="Month">Month:</label>
+            <input type="text" id="Month" name="Month">
+
+            <label for="Age">Age:</label>
+            <input type="text" id="Age" name="Age">
+
+            <label for="Occupation">Occupation:</label>
+            <input type="text" id="Occupation" name="Occupation">
+
+            <label for="Annual_Income">Annual Income:</label>
+            <input type="text" id="Annual_Income" name="Annual_Income">
+
+            <label for="Monthly_Inhand_Salary">Monthly Inhand Salary:</label>
+            <input type="text" id="Monthly_Inhand_Salary" name="Monthly_Inhand_Salary">
+
+            <label for="Num_Bank_Accounts">Number of Bank Accounts:</label>
+            <input type="text" id="Num_Bank_Accounts" name="Num_Bank_Accounts">
+
+            <label for="Num_Credit_Card">Number of Credit Cards:</label>
+            <input type="text" id="Num_Credit_Card" name="Num_Credit_Card">
+
+            <label for="Interest_Rate">Interest Rate:</label>
+            <input type="text" id="Interest_Rate" name="Interest_Rate">
+
+            <label for="Num_of_Loan">Number of Loans:</label>
+            <input type="text" id="Num_of_Loan" name="Num_of_Loan">
+
+            <label for="Type_of_Loan">Type of Loan:</label>
+            <input type="text" id="Type_of_Loan" name="Type_of_Loan">
+
+            <label for="Delay_from_due_date">Delay from Due Date:</label>
+            <input type="text" id="Delay_from_due_date" name="Delay_from_due_date">
+
+            <label for="Num_of_Delayed_Payment">Number of Delayed Payments:</label>
+            <input type="text" id="Num_of_Delayed_Payment" name="Num_of_Delayed_Payment">
+
+            <label for="Changed_Credit_Limit">Changed Credit Limit:</label>
+            <input type="text" id="Changed_Credit_Limit" name="Changed_Credit_Limit">
+
+            <label for="Num_Credit_Inquiries">Number of Credit Inquiries:</label>
+            <input type="text" id="Num_Credit_Inquiries" name="Num_Credit_Inquiries">
+
+            <label for="Credit_Mix">Credit Mix:</label>
+            <input type="text" id="Credit_Mix" name="Credit_Mix">
+
+            <label for="Outstanding_Debt">Outstanding Debt:</label>
+            <input type="text" id="Outstanding_Debt" name="Outstanding_Debt">
+
+            <label for="Credit_Utilization_Ratio">Credit Utilization Ratio:</label>
+            <input type="text" id="Credit_Utilization_Ratio" name="Credit_Utilization_Ratio">
+
+            <label for="Payment_of_Min_Amount">Payment of Minimum Amount:</label>
+            <input type="text" id="Payment_of_Min_Amount" name="Payment_of_Min_Amount">
+
+            <label for="Total_EMI_per_month">Total EMI per month:</label>
+            <input type="text" id="Total_EMI_per_month" name="Total_EMI_per_month">
+
+            <label for="Amount_invested_monthly">Amount invested monthly:</label>
+            <input type="text" id="Amount_invested_monthly" name="Amount_invested_monthly">
+
+            <label for="Payment_Behaviour">Payment Behaviour:</label>
+            <input type="text" id="Payment_Behaviour" name="Payment_Behaviour">
+
+            <label for="Monthly_Balance">Monthly Balance:</label>
+            <input type="text" id="Monthly_Balance" name="Monthly_Balance">
+
+            <label for="Total_Months">Total Months:</label>
+            <input type="text" id="Total_Months" name="Total_Months">
+
+            <!-- Add more input fields for other features -->
+
+            <button type="submit">Predict</button>
+        </form>
+        <div id="predictionResult"></div>
+    </div>
+
+    <script>
+        // Train Model Form Submission
+        $('#trainForm').submit(function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: '/train',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    $('#trainMessage').text(response.message);
+                }
+            });
+        });
+
+        // Predict Form Submission
+        $('#predictForm').submit(function(event) {
+            event.preventDefault();
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url: '/predict',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    $('#predictionResult').text('Prediction: ' + response.prediction);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
